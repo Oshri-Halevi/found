@@ -3,85 +3,279 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#3E8EDB">
 <title>מצאת פריט של אושרי</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f4f6f8;
-    --card: #ffffff;
-    --text: #1d2329;
-    --muted: #5b6670;
-    --wa: #25d366;
-    --wa-dark: #1ebe5b;
-    --border: #dfe4e8;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #12161a;
-      --card: #1c2228;
-      --text: #eef2f5;
-      --muted: #a3adb6;
-      --border: #2c343c;
-    }
+    --sky: #3E8EDB;
+    --sky-deep: #4A90D9;
+    --kraft: #DDBE8C;
+    --kraft-edge: #C9A56E;
+    --ink: #1C2340;
+    --ink-soft: #4A4F66;
+    --wa: #1FAF55;
+    --wa-press: #178F45;
+    --string: #8A6A44;
   }
   * { box-sizing: border-box; }
+  html, body { height: 100%; }
   body {
     margin: 0;
     min-height: 100vh;
+    font-family: "Assistant", system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 85% 12%, #FFF6D8 0 40px, rgba(255,240,200,.7) 52px, rgba(255,236,190,.25) 120px, transparent 220px),
+      linear-gradient(180deg, #3E8EDB 0%, #7DB8EC 45%, #BFE0F7 78%, #F6E7D2 100%);
+    background-attachment: fixed;
     display: flex;
-    align-items: center;
     justify-content: center;
-    padding: 16px;
-    background: var(--bg);
-    color: var(--text);
-    font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    overflow-x: hidden;
   }
-  .card {
-    width: 100%;
-    max-width: 380px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 32px 24px;
+
+  /* drifting clouds */
+  .sky { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+  .cloud {
+    position: absolute;
+    width: 120px;
+    height: 40px;
+    background: #fff;
+    border-radius: 40px;
+    opacity: .9;
+    animation: drift linear infinite;
+  }
+  .cloud::before, .cloud::after {
+    content: "";
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+  }
+  .cloud::before { width: 56px; height: 56px; top: -28px; left: 18px; }
+  .cloud::after  { width: 42px; height: 42px; top: -18px; left: 60px; }
+  .c1 { top: 8%;  transform: scale(1.3); animation-duration: 70s; animation-delay: -10s; }
+  .c2 { top: 30%; transform: scale(.8);  animation-duration: 90s; animation-delay: -55s; opacity: .75; }
+  .c3 { top: 58%; transform: scale(1.6); animation-duration: 110s; animation-delay: -30s; opacity: .8; }
+  .c4 { top: 80%; transform: scale(1);   animation-duration: 80s; animation-delay: -70s; opacity: .7; }
+  .c5 { top: 18%; transform: scale(.6);  animation-duration: 100s; animation-delay: -85s; opacity: .65; }
+  @keyframes drift {
+    from { left: -220px; }
+    to   { left: calc(100% + 60px); }
+  }
+  .hanger { z-index: 1; }
+
+  /* the hanging tag */
+  .hanger {
+    position: relative;
+    width: min(360px, calc(100vw - 32px));
+    margin-top: 110px;
+    margin-bottom: 40px;
+    transform-origin: 50% -110px;
+    animation: swing 2.4s cubic-bezier(.3,.6,.4,1) both;
+  }
+  .hanger::before { /* string from top of screen to the eyelet */
+    content: "";
+    position: absolute;
+    top: -110px;
+    left: 50%;
+    width: 3px;
+    height: 136px;
+    margin-left: -1.5px;
+    background: var(--string);
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.08);
+  }
+  .hanger.wiggle { animation: wiggle .9s cubic-bezier(.3,.6,.4,1); }
+
+  @keyframes swing {
+    0%   { transform: rotate(-24deg); }
+    30%  { transform: rotate(14deg); }
+    52%  { transform: rotate(-8deg); }
+    70%  { transform: rotate(4deg); }
+    85%  { transform: rotate(-1.5deg); }
+    100% { transform: rotate(0); }
+  }
+  @keyframes wiggle {
+    0% { transform: rotate(0); }
+    25% { transform: rotate(6deg); }
+    55% { transform: rotate(-4deg); }
+    80% { transform: rotate(1.5deg); }
+    100% { transform: rotate(0); }
+  }
+
+  .tag-shadow { filter: drop-shadow(0 18px 28px rgba(8,16,60,.45)); }
+  .tag {
+    position: relative;
+    background:
+      repeating-linear-gradient(115deg, rgba(255,255,255,.05) 0 2px, transparent 2px 7px),
+      linear-gradient(170deg, #E6CA9C 0%, var(--kraft) 55%, #D3B07B 100%);
+    clip-path: polygon(22% 0, 78% 0, 100% 64px, 100% 100%, 0 100%, 0 64px);
+    border-radius: 0 0 14px 14px;
+    padding: 64px 28px 30px;
     text-align: center;
-    box-shadow: 0 8px 24px rgba(0,0,0,.06);
   }
-  .emoji { font-size: 56px; line-height: 1; margin-bottom: 12px; }
-  h1 { font-size: 24px; margin: 0 0 8px; }
-  p { color: var(--muted); font-size: 17px; line-height: 1.6; margin: 0 0 24px; }
+  .eyelet {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    width: 26px;
+    height: 26px;
+    margin-left: -13px;
+    border-radius: 50%;
+    background: var(--sky-deep);
+    box-shadow: 0 0 0 6px #B8B2A6, 0 0 0 7px #8F887B, inset 0 2px 3px rgba(0,0,0,.35);
+  }
+
+  .stamp {
+    display: inline-block;
+    font-family: "Secular One", sans-serif;
+    font-size: 15px;
+    color: #B23A2E;
+    border: 2px solid #B23A2E;
+    border-radius: 6px;
+    padding: 2px 12px;
+    transform: rotate(-4deg);
+    opacity: .85;
+    margin: 6px 0 18px;
+  }
+
+  h1 {
+    font-family: "Secular One", sans-serif;
+    font-weight: 400;
+    font-size: clamp(30px, 9vw, 40px);
+    line-height: 1.15;
+    margin: 0 0 14px;
+    letter-spacing: -.01em;
+  }
+  .name { display: block; font-size: 1.55em; line-height: 1; }
+
+  p {
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin: 0 auto 26px;
+    max-width: 26ch;
+  }
+
+  p.en {
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: 30ch;
+    margin-top: -14px;
+    margin-bottom: 24px;
+    opacity: .8;
+  }
+
+  .dash { border: 0; border-top: 2px dashed rgba(28,35,64,.25); margin: 0 -8px 24px; }
+
   .btn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
     width: 100%;
-    padding: 16px;
+    min-height: 56px;
+    padding: 14px 18px;
     border-radius: 14px;
-    font-size: 18px;
-    font-weight: 600;
+    font-family: inherit;
+    font-size: 19px;
+    font-weight: 700;
     text-decoration: none;
-    margin-bottom: 12px;
+    transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
   }
-  .wa { background: var(--wa); color: #fff; }
-  .wa:hover { background: var(--wa-dark); }
-  .call { background: transparent; color: var(--text); border: 1px solid var(--border); }
-  svg { width: 24px; height: 24px; fill: currentColor; }
+  .btn svg { width: 24px; height: 24px; fill: currentColor; flex: none; }
+  .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+  .wa {
+    background: var(--wa);
+    color: #fff;
+    box-shadow: 0 5px 0 var(--wa-press);
+    margin-bottom: 14px;
+  }
+  .wa:hover { background: #22BD5D; }
+  .wa:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--wa-press); }
+
+  .call {
+    background: rgba(255,255,255,.35);
+    color: var(--ink);
+    box-shadow: inset 0 0 0 2px rgba(28,35,64,.3);
+  }
+  .call:hover { background: rgba(255,255,255,.5); }
+  .call:active { transform: translateY(2px); }
+
+  .thanks {
+    margin-top: 22px;
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+
+  .thanks {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .heart {
+    width: 18px;
+    height: 18px;
+    fill: #B23A2E;
+    animation: beat 1.2s ease-in-out 2.4s 2;
+  }
+  @keyframes beat {
+    0%, 100% { transform: scale(1); }
+    20% { transform: scale(1.3); }
+    40% { transform: scale(1); }
+    60% { transform: scale(1.18); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .heart, .cloud { animation: none; }
+    .c1 { left: 6%; } .c2 { left: 70%; } .c3 { left: 55%; } .c4 { left: 10%; } .c5 { left: 40%; }
+    .hanger, .hanger.wiggle { animation: none; }
+    .btn { transition: none; }
+  }
 </style>
 </head>
 <body>
-  <main class="card">
-    <div class="emoji">🙂</div>
-    <h1>מצאת פריט של אושרי</h1>
-    <p>אנא צור קשר כדי שאוכל לקבל אותו בחזרה.<br>תודה רבה!</p>
+  <div class="sky" aria-hidden="true">
+    <span class="cloud c1"></span><span class="cloud c2"></span><span class="cloud c3"></span><span class="cloud c4"></span><span class="cloud c5"></span>
+  </div>
+  <div class="hanger" id="hanger">
+    <div class="tag-shadow">
+      <main class="tag">
+        <span class="eyelet" aria-hidden="true"></span>
+        <div class="stamp">אבדה</div>
+        <h1>מצאת פריט של<span class="name">אושרי</span></h1>
+        <p>אנא צור קשר כדי שאוכל לקבל אותו בחזרה.</p>
+        <p class="en" lang="en" dir="ltr">Found this? It belongs to Oshri.<br>Please reach out via WhatsApp or call. Thank you!</p>
+        <hr class="dash">
 
-    <a class="btn wa" href="https://wa.me/972526063126?text=%D7%94%D7%99%D7%99%20%D7%90%D7%95%D7%A9%D7%A8%D7%99%2C%20%D7%9E%D7%A6%D7%90%D7%AA%D7%99%20%D7%A4%D7%A8%D7%99%D7%98%20%D7%A9%D7%9C%D7%9A%20%F0%9F%99%82">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Zm5.8 14.03c-.24.68-1.42 1.31-1.96 1.36-.5.05-1.13.22-3.81-.8-3.22-1.27-5.26-4.57-5.42-4.78-.16-.21-1.29-1.72-1.29-3.28s.82-2.33 1.11-2.65c.29-.32.63-.4.84-.4l.6.01c.19.01.45-.07.71.54.26.63.88 2.17.96 2.33.08.16.13.34.03.55-.1.21-.16.34-.31.53-.16.18-.33.41-.47.55-.16.16-.32.33-.14.65.18.32.81 1.34 1.74 2.17 1.2 1.07 2.21 1.4 2.53 1.56.32.16.5.13.68-.08.18-.21.79-.92 1-1.24.21-.32.42-.26.71-.16.29.11 1.84.87 2.16 1.03.32.16.53.24.6.37.08.14.08.77-.16 1.46Z"/></svg>
-      שלח לי וואטסאפ
-    </a>
+        <a class="btn wa" href="https://wa.me/972526063126?text=%D7%94%D7%99%D7%99%20%D7%90%D7%95%D7%A9%D7%A8%D7%99%2C%20%D7%9E%D7%A6%D7%90%D7%AA%D7%99%20%D7%A4%D7%A8%D7%99%D7%98%20%D7%A9%D7%9C%D7%9A%20%F0%9F%99%82">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Zm5.8 14.03c-.24.68-1.42 1.31-1.96 1.36-.5.05-1.13.22-3.81-.8-3.22-1.27-5.26-4.57-5.42-4.78-.16-.21-1.29-1.72-1.29-3.28s.82-2.33 1.11-2.65c.29-.32.63-.4.84-.4l.6.01c.19.01.45-.07.71.54.26.63.88 2.17.96 2.33.08.16.13.34.03.55-.1.21-.16.34-.31.53-.16.18-.33.41-.47.55-.16.16-.32.33-.14.65.18.32.81 1.34 1.74 2.17 1.2 1.07 2.21 1.4 2.53 1.56.32.16.5.13.68-.08.18-.21.79-.92 1-1.24.21-.32.42-.26.71-.16.29.11 1.84.87 2.16 1.03.32.16.53.24.6.37.08.14.08.77-.16 1.46Z"/></svg>
+          שלח לי וואטסאפ
+        </a>
 
-    <a class="btn call" href="tel:+972526063126">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2Z"/></svg>
-      התקשר
-    </a>
-  </main>
+        <a class="btn call" href="tel:+972526063126">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2Z"/></svg>
+          התקשר
+        </a>
+
+        <div class="thanks">תודה רבה!<svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.6s-7.6-4.6-9.3-9.4C1.6 8 3.6 4.6 7 4.6c2 0 3.6 1.2 5 3.1 1.4-1.9 3-3.1 5-3.1 3.4 0 5.4 3.4 4.3 6.6-1.7 4.8-9.3 9.4-9.3 9.4Z"/></svg></div>
+      </main>
+    </div>
+  </div>
+
+<script>
+  // tapping the tag (not a button) gives it a little swing
+  const hanger = document.getElementById('hanger');
+  hanger.addEventListener('click', (e) => {
+    if (e.target.closest('a')) return;
+    hanger.classList.remove('wiggle');
+    void hanger.offsetWidth;
+    hanger.classList.add('wiggle');
+  });
+</script>
 </body>
 </html>
